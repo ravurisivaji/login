@@ -1,0 +1,38 @@
+# Server configuration
+server:
+  port: 8080
+spring:
+  mvc:
+    contentnegotiation:
+      default-content-type: application/json
+      favor-parameter: false
+      favor-path-extension: false
+      media-types:
+        json: application/json
+  application:
+    name: Calibration Manangement System
+    # MySQL Database configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/calibration_dev?createDatabaseIfNotExist=true
+    username: root
+    password: 1974@Surya
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# JPA/Hibernate properties
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+ # JWT Configuration
+jwt:
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  expiration: 86400000
+#  refresh-token-expiration: 604800000
+  # Logging
+logging:
+  level:
+    org.springframework.security: DEBUG
