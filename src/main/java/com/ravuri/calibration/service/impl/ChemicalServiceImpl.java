@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.ravuri.calibration.constant.CalibrationConstants.DATE_FORMATTER;
+import static com.ravuri.calibration.constant.CalibrationConstants.TIME_FORMATTER;
+
 @Service
 public class ChemicalServiceImpl implements ChemicalService {
 
@@ -39,13 +42,15 @@ public class ChemicalServiceImpl implements ChemicalService {
             checkDuplicates(chemical);
 
             LocalDateTime now = LocalDateTime.now();
+            String uuid = generateChemicalUUID(chemical.getName(), chemical.getReceivedOn());
+            chemical.setBatchNumber(uuid);
             chemical.setCreatedAt(now);
             chemical.setCreatedBy(username);
             chemical.setLastModifiedAt(now);
             chemical.setLastModifiedBy(username);
 
             Chemical savedChemical = chemicalRepository.save(chemical);
-            LOGGER.info("Created new chemical: {} with batch number: {}",
+            LOGGER.info("Created new chemical: {} with UUID: {}",
                     savedChemical.getName(), savedChemical.getBatchNumber());
             return savedChemical;
         } catch (Exception e) {
@@ -307,6 +312,25 @@ public class ChemicalServiceImpl implements ChemicalService {
         if (user == null || user.trim().isEmpty()) {
             throw new ChemicalValidationException("User is required");
         }
+    }
+
+    private String generateChemicalUUID(String chemicalName, LocalDateTime receivedDate) {
+        // Get first 4 characters of chemical name (padded with X if shorter)
+        String namePrefix = (chemicalName + "XXXX").substring(0, 4).toUpperCase();
+
+        // Format received date
+        String dateStr = receivedDate.format(DATE_FORMATTER);
+
+        // Get current timestamp
+        String timeStr = LocalDateTime.now().format(TIME_FORMATTER);
+
+        // Combine all parts to create 32-character UUID
+        // Format: CCCC-YYYYMMDD-HHMMSS-RRRRRRRRRRRR
+        // where CCCC = chemical prefix, R = random padding
+        String randomPadding = String.format("%012d", System.nanoTime() % 1000000000000L);
+
+        return String.format("%s-%s-%s-%s",
+                namePrefix, dateStr, timeStr, randomPadding);
     }
 
 

@@ -18,9 +18,19 @@ public interface InstrumentUsageRepository extends JpaRepository<InstrumentUsage
 
     List<InstrumentUsage> findByStartTimeBetween(LocalDateTime start, LocalDateTime end);
 
+    List<InstrumentUsage> findByDepartmentAndLocation(String department, String location);
+
     @Query("SELECT u FROM InstrumentUsage u WHERE u.status = 'IN_PROGRESS' AND u.instrumentId = ?1")
     List<InstrumentUsage> findActiveUsageByInstrument(String instrumentId);
 
     @Query("SELECT u FROM InstrumentUsage u WHERE u.status = 'IN_PROGRESS' AND u.userId = ?1")
     List<InstrumentUsage> findActiveUsageByUser(String userId);
+
+    @Query("SELECT u FROM InstrumentUsage u WHERE u.userId = :userId " +
+            "AND u.department = :department AND u.location = :location " +
+            "AND u.startTime BETWEEN :startDate AND :endDate")
+    List<InstrumentUsage> findUserUsageInDateRange(
+            String userId, String department, String location,
+            LocalDateTime startDate, LocalDateTime endDate);
+
 }

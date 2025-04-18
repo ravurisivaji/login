@@ -30,7 +30,18 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
-
+# Email Configuration
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: sivaiahravuri044@gmail.com
+    password: 1974@Surya
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
  # JWT Configuration
 jwt:
   secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
@@ -45,3 +56,15 @@ logging:
 document:
   storage:
     path: E:/var/lib/documents
+
+# Swagger/OpenAPI configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    tryItOutEnabled: true
+    filter: true
+
