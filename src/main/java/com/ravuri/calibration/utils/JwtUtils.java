@@ -56,10 +56,11 @@ public class JwtUtils {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
+    private String createToken(Map<String, Object> claims, String subject, String role) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
+                .claim("role", role)
                 .setIssuer(ISSUER)
                 .setAudience(AUDIENCE)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -73,8 +74,8 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String username, String role) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        return createToken(claims, username, role);
     }
 }

@@ -16,11 +16,11 @@ public class User {
     private String email;
     private String phone;
     private String password;
-//    private String role = "ROLE_USER";
+    private String role = "ROLE_USER";
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "role_id", nullable = false)
+//    private Role role;
 
     public User() {}
 
@@ -71,11 +71,11 @@ public class User {
         this.employeeId = employeeId;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

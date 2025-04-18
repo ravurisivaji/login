@@ -2,7 +2,11 @@ package com.ravuri.calibration.controller;
 
 import com.ravuri.calibration.dto.AuthenticationRequest;
 import com.ravuri.calibration.dto.AuthenticationResponse;
+import com.ravuri.calibration.entity.Role;
+import com.ravuri.calibration.entity.User;
 import com.ravuri.calibration.security.UserDetailedServiceImpl;
+import com.ravuri.calibration.service.RoleService;
+import com.ravuri.calibration.service.UserService;
 import com.ravuri.calibration.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RequestMapping("/api/v1/auth")
 @RestController
@@ -35,6 +40,14 @@ public class AuthenticationController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private UserService userService;
+
+    private static final String TOKEN_PREFIX = "Bearer ";
 
     /**
      * This method is used to authenticate the user and generate a JWT token.
@@ -71,7 +84,17 @@ public class AuthenticationController {
             throw new Exception("Internal server error");
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmployeeId());
-        final String jwt = jwtUtils.generateToken(userDetails.getUsername());
+
+        Optional<User> user = userService.getUserByEmployeeId(authenticationRequest.getEmployeeId());
+        if (user.isPresent()) {
+            LOGGER.info("User role: {}", user.get().getRole());
+        } else {
+            LOGGER.warn("Role not found for user: {}", userDetails.getUsername());
+        }
+        // Generate JWT token
+        final String jwt = jwtUtils.generateToken(userDetails.getUsername(), user.get().getRole());
+
+
 
         return new AuthenticationResponse(jwt, authenticationRequest.getEmployeeId());
     }

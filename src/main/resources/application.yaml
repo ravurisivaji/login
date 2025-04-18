@@ -17,7 +17,11 @@ spring:
     username: root
     password: 1974@Surya
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+# Multipart file configuration
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 # JPA/Hibernate properties
   jpa:
     hibernate.ddl-auto: update
@@ -36,3 +40,8 @@ jwt:
 logging:
   level:
     org.springframework.security: DEBUG
+
+# Document storage configuration
+document:
+  storage:
+    path: E:/var/lib/documents

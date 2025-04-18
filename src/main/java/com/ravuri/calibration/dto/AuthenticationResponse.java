@@ -19,9 +19,17 @@ public class AuthenticationResponse implements Serializable {
     // Default constructor
     public AuthenticationResponse() {}
 
+    public AuthenticationResponse(String token, String username, String role, String employeeId) {
+        this.token = token;
+        this.username = username;
+        this.role = role;
+        this.employeeId = employeeId;
+    }
+
     public AuthenticationResponse(String token, String username) {
         this.token = token;
         this.username = username;
+  
     }
 
     public String getToken() {

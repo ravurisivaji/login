@@ -1,0 +1,14 @@
+package com.ravuri.calibration.entity;
+
+public enum DepartmentType {
+    RESEARCH_AND_DEVELOPMENT,
+    QUALITY_CONTROL,
+    MANUFACTURING,
+    REGULATORY_AFFAIRS,
+    SALES_AND_MARKETING,
+    HUMAN_RESOURCES,
+    FINANCE,
+    INFORMATION_TECHNOLOGY,
+    SUPPLY_CHAIN,
+    CLINICAL_RESEARCH
+}
